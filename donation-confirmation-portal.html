@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kindness Collective '95 - Donation Confirmation Portal</title>
+    
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- EmailJS -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .file-drop-area {
+            border: 2px dashed #cbd5e0;
+            border-radius: 10px;
+            width: 100%;
+            height: 200px;
+            text-align: center;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        .file-drop-area:hover {
+            border-color: #4299e1;
+            background-color: #f7fafc;
+        }
+        .file-drop-area.drag-over {
+            border-color: #4299e1;
+            background-color: #ebf8ff;
+        }
+        .preview-image {
+            max-width: 200px;
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4299e1;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .success-animation {
+            animation: pulse 2s;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="gradient-bg text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="text-center">
+                <h1 class="text-4xl font-bold mb-2">
+                    <i class="fas fa-heart text-pink-200 mr-3"></i>
+                    Kindness Collective '95
+                </h1>
+                <p class="text-xl text-blue-100">Donation Confirmation Portal</p>
+                <p class="text-sm text-blue-200 mt-2">Thank you for your generous contribution to our mission</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="max-w-2xl mx-auto">
+            <!-- Info Card -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                <div class="flex items-center mb-4">
+                    <i class="fas fa-info-circle text-blue-500 text-xl mr-3"></i>
+                    <h2 class="text-xl font-semibold">How it works</h2>
+                </div>
+                <p class="text-gray-600 mb-4">
+                    Please confirm your donation by uploading a screenshot or receipt of your transfer to our foundation's bank account. 
+                    This helps us track and acknowledge your generous contribution properly.
+                </p>
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <p class="text-sm text-blue-700">
+                        <i class="fas fa-shield-alt mr-2"></i>
+                        Your information is secure and will only be used for donation tracking and acknowledgment purposes.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Donation Form -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <form id="donationForm" class="space-y-6">
+                    <!-- Personal Information -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                            <i class="fas fa-user mr-2 text-gray-600"></i>
+                            Your Information
+                        </h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2" for="donorName">
+                                    Full Name *
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="donorName" 
+                                    name="donorName" 
+                                    required 
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    placeholder="Enter your full name"
+                                >
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2" for="donorEmail">
+                                    Email Address *
+                                </label>
+                                <input 
+                                    type="email" 
+                                    id="donorEmail" 
+                                    name="donorEmail" 
+                                    required 
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    placeholder="your.email@example.com"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2" for="donorPhone">
+                                Phone Number
+                            </label>
+                            <input 
+                                type="tel" 
+                                id="donorPhone" 
+                                name="donorPhone" 
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="Optional phone number"
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Donation Details -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                            <i class="fas fa-donate mr-2 text-green-600"></i>
+                            Donation Details
+                        </h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2" for="donationAmount">
+                                    Donation Amount *
+                                </label>
+                                <div class="relative">
+                                    <span class="absolute left-3 top-2 text-gray-500">₱</span>
+                                    <input 
+                                        type="number" 
+                                        id="donationAmount" 
+                                        name="donationAmount" 
+                                        required 
+                                        step="0.01"
+                                        min="1"
+                                        class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        placeholder="0.00"
+                                    >
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2" for="donationDate">
+                                    Date of Donation *
+                                </label>
+                                <input 
+                                    type="date" 
+                                    id="donationDate" 
+                                    name="donationDate" 
+                                    required 
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2" for="paymentMethod">
+                                Payment Method *
+                            </label>
+                            <select 
+                                id="paymentMethod" 
+                                name="paymentMethod" 
+                                required 
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            >
+                                <option value="">Select payment method</option>
+                                <option value="Bank Transfer">Bank Transfer</option>
+                                <option value="GCash">GCash</option>
+                                <option value="PayMaya">PayMaya</option>
+                                <option value="Online Banking">Online Banking</option>
+                                <option value="Cash Deposit">Cash Deposit</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- File Upload -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                            <i class="fas fa-upload mr-2 text-purple-600"></i>
+                            Upload Receipt/Screenshot *
+                        </h3>
+                        
+                        <div class="file-drop-area" id="fileDropArea">
+                            <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-3"></i>
+                            <p class="text-gray-600 mb-2">Drag and drop your receipt here, or click to browse</p>
+                            <p class="text-sm text-gray-500 mb-3">Supported: JPG, PNG, PDF (Max 5MB)</p>
+                            <input type="file" id="receiptFile" accept="image/*,.pdf" class="hidden">
+                            <button type="button" onclick="document.getElementById('receiptFile').click()" 
+                                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition-colors">
+                                <i class="fas fa-folder-open mr-2"></i>Browse Files
+                            </button>
+                        </div>
+                        
+                        <div id="filePreview" class="mt-4 hidden">
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-file-image text-blue-500 text-xl mr-3"></i>
+                                        <div>
+                                            <p class="font-medium text-gray-800" id="fileName"></p>
+                                            <p class="text-sm text-gray-500" id="fileSize"></p>
+                                        </div>
+                                    </div>
+                                    <button type="button" onclick="removeFile()" class="text-red-500 hover:text-red-700">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                                <div id="imagePreview" class="mt-3 hidden">
+                                    <img id="previewImg" class="preview-image" alt="Receipt preview">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Message -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2" for="message">
+                            Additional Message (Optional)
+                        </label>
+                        <textarea 
+                            id="message" 
+                            name="message" 
+                            rows="3" 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            placeholder="Any additional message you'd like to include..."
+                        ></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="text-center pt-6">
+                        <button 
+                            type="submit" 
+                            id="submitBtn"
+                            class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-semibold text-lg transition-colors shadow-lg"
+                        >
+                            <i class="fas fa-paper-plane mr-2"></i>
+                            Confirm Donation
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Loading Modal -->
+    <div id="loadingModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+        <div class="bg-white p-8 rounded-lg text-center">
+            <div class="loading-spinner"></div>
+            <p class="text-gray-700 mt-4">Processing your donation confirmation...</p>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+        <div class="bg-white p-8 rounded-lg text-center max-w-md mx-4">
+            <div class="success-animation">
+                <i class="fas fa-check-circle text-green-500 text-6xl mb-4"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-2">Thank You!</h3>
+            <p class="text-gray-600 mb-6">
+                Your donation confirmation has been submitted successfully. Our team will review it and send you an acknowledgment soon.
+            </p>
+            <button onclick="closeSuccessModal()" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-md">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div id="errorModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+        <div class="bg-white p-8 rounded-lg text-center max-w-md mx-4">
+            <i class="fas fa-exclamation-triangle text-red-500 text-6xl mb-4"></i>
+            <h3 class="text-2xl font-bold text-gray-800 mb-2">Error</h3>
+            <p class="text-gray-600 mb-6" id="errorMessage">
+                Something went wrong. Please try again.
+            </p>
+            <button onclick="closeErrorModal()" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-md">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // === CONFIGURATION ===
+        // Replace with your actual EmailJS credentials and Google Sheets API Key
+        const EMAILJS_USER_ID = 'tBdzRMvNJwgsWj67t'; // e.g. tBdzRMvNJwgsWj67t
+        const EMAILJS_SERVICE_ID = 'service_08ehf2e'; // e.g. service_08ehf2e
+        const EMAILJS_TEMPLATE_ID = 'template_rww8ptn'; // e.g. template_rww8ptn
+        const EMAILJS_CONFIRMATION_TEMPLATE_ID = 'YOUR_CONFIRMATION_TEMPLATE_ID'; // set up a confirmation template in EmailJS
+        const GOOGLE_SHEETS_API_KEY = '1OcF1PPMC8aZuc5j-0dIJ98Qd2PayKcYNqi9e5qyKmvU';
+        // Google Sheets config (use a backend, see note below)
+        const SHEET_ID = "1OcF1PPMC8aZuc5j-0dIJ98Qd2PayKcYNqi9e5qyKmvU";
+        
+        // Executive team emails
+        const executiveEmails = [
+            "earl782002@yahoo.com",
+            "rowelaparicio@yahoo.com.ph",
+            "jonjoshtiongson@gmail.com"
+        ];
+
+        // === EmailJS Initialization ===
+        emailjs.init(EMAILJS_USER_ID);
+
+        // Set today's date as default
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('donationDate').valueAsDate = new Date();
+        });
+
+        // File upload functionality
+        const fileDropArea = document.getElementById('fileDropArea');
+        const fileInput = document.getElementById('receiptFile');
+        const filePreview = document.getElementById('filePreview');
+        let selectedFile = null;
+        
+        // Drag and drop events
+        fileDropArea.addEventListener('click', () => fileInput.click());
+        fileDropArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileDropArea.classList.add('drag-over');
+        });
+        fileDropArea.addEventListener('dragleave', () => {
+            fileDropArea.classList.remove('drag-over');
+        });
+        fileDropArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileDropArea.classList.remove('drag-over');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFileSelect(files[0]);
+            }
+        });
+        
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFileSelect(e.target.files[0]);
+            }
+        });
+        
+        function handleFileSelect(file) {
+            // Validate file type and size
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];
+            const maxSize = 5 * 1024 * 1024; // 5MB
+            
+            if (!allowedTypes.includes(file.type)) {
+                showError('Please upload a valid file (JPG, PNG, or PDF)');
+                return;
+            }
+            
+            if (file.size > maxSize) {
+                showError('File size must be less than 5MB');
+                return;
+            }
+            
+            selectedFile = file;
+            showFilePreview(file);
+        }
+        
+        function showFilePreview(file) {
+            document.getElementById('fileName').textContent = file.name;
+            document.getElementById('fileSize').textContent = formatFileSize(file.size);
+            
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    document.getElementById('previewImg').src = e.target.result;
+                    document.getElementById('imagePreview').classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                document.getElementById('imagePreview').classList.add('hidden');
+            }
+            
+            filePreview.classList.remove('hidden');
+        }
+        
+        function removeFile() {
+            selectedFile = null;
+            filePreview.classList.add('hidden');
+            fileInput.value = '';
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        // Form submission
+        document.getElementById('donationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!selectedFile) {
+                showError('Please upload a receipt or screenshot of your donation.');
+                return;
+            }
+            
+            showLoading();
+            
+            try {
+                const formData = new FormData(e.target);
+                const donationData = {
+                    donorName: formData.get('donorName'),
+                    donorEmail: formData.get('donorEmail'),
+                    donorPhone: formData.get('donorPhone') || 'Not provided',
+                    donationAmount: formData.get('donationAmount'),
+                    donationDate: formData.get('donationDate'),
+                    paymentMethod: formData.get('paymentMethod'),
+                    message: formData.get('message') || 'No additional message',
+                    timestamp: new Date().toISOString()
+                };
+                
+                // Convert file to base64 for email attachment
+                const fileBase64 = await fileToBase64(selectedFile);
+                
+                // Send emails to executive team
+                await sendNotificationEmails(donationData, fileBase64);
+                
+                // Send confirmation email to donor
+                await sendConfirmationEmail(donationData);
+                
+                // Record in Google Sheets
+                await recordInGoogleSheets(donationData);
+                
+                hideLoading();
+                showSuccess();
+                
+                // Reset form
+                document.getElementById('donationForm').reset();
+                removeFile();
+                document.getElementById('donationDate').valueAsDate = new Date();
+                
+            } catch (error) {
+                console.error('Error submitting donation:', error);
+                hideLoading();
+                showError('Failed to submit donation confirmation. Please try again.');
+            }
+        });
+        
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result.split(',')[1]);
+                reader.onerror = error => reject(error);
+            });
+        }
+        
+        async function sendNotificationEmails(donationData, fileBase64) {
+            const emailPromises = executiveEmails.map(email => {
+                return emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+                    to_email: email,
+                    subject: "New Donation Confirmation - Kindness Collective '95",
+                    donor_name: donationData.donorName,
+                    donor_email: donationData.donorEmail,
+                    donor_phone: donationData.donorPhone,
+                    donation_amount: donationData.donationAmount,
+                    donation_date: donationData.donationDate,
+                    payment_method: donationData.paymentMethod,
+                    message: donationData.message,
+                    timestamp: new Date(donationData.timestamp).toLocaleString(),
+                    attachment: fileBase64
+                });
+            });
+            await Promise.all(emailPromises);
+        }
+        
+        async function sendConfirmationEmail(donationData) {
+            await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_CONFIRMATION_TEMPLATE_ID, {
+                to_email: donationData.donorEmail,
+                donor_name: donationData.donorName,
+                donation_amount: donationData.donationAmount,
+                donation_date: donationData.donationDate
+            });
+        }
+        
+        async function recordInGoogleSheets(donationData) {
+            // WARNING: Do NOT use Google Sheets API with API key in browser for writing (security risk)
+            // Instead, set up a simple backend with an endpoint that adds the record to your sheet via a service account.
+            // The below is for illustration only; remove API_KEY from client side for production use.
+            const sheetData = [
+                new Date(donationData.timestamp).toLocaleString(),
+                donationData.donorName,
+                donationData.donorEmail,
+                donationData.donorPhone,
+                donationData.donationAmount,
+                donationData.donationDate,
+                donationData.paymentMethod,
+                donationData.message,
+                'Pending Review'
+            ];
+            // Example: POST to your backend here
+            // await fetch('https://your-backend-url/record-donation', {
+            //     method: 'POST',
+            //     headers: {'Content-Type': 'application/json'},
+            //     body: JSON.stringify({sheetId: SHEET_ID, row: sheetData})
+            // });
+            console.log('Recording to Google Sheets:', sheetData);
+        }
+        
+        // Modal functions
+        function showLoading() {
+            document.getElementById('loadingModal').classList.remove('hidden');
+        }
+        function hideLoading() {
+            document.getElementById('loadingModal').classList.add('hidden');
+        }
+        function showSuccess() {
+            document.getElementById('successModal').classList.remove('hidden');
+        }
+        function closeSuccessModal() {
+            document.getElementById('successModal').classList.add('hidden');
+        }
+        function showError(message) {
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorModal').classList.remove('hidden');
+        }
+        function closeErrorModal() {
+            document.getElementById('errorModal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
